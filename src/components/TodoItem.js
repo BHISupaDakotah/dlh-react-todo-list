@@ -34,7 +34,9 @@ export default class TodoItem extends Component {
           {this.props.title || "no title"}
         </p>
 
-        <button>x</button>
+        <button onClick={() => this.props.handleDelete(this.props.id)}>
+          x
+        </button>
       </div>
     );
   }
