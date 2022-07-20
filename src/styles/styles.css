@@ -57,3 +57,8 @@ button {
   width: 80%;
   /* justify-content: space-evenly; */
 }
+
+.done {
+  color: black;
+  text-decoration: line-through;
+}

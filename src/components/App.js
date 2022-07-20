@@ -1,5 +1,6 @@
 // main controller
 import { Component } from "react";
+import TodoItem from "./TodoItem";
 
 class App extends Component {
   constructor() {
@@ -7,9 +8,23 @@ class App extends Component {
 
     this.state = {
       todo: "",
-      todos: [],
+      todos: [{ id: 1, title: "test todo items", done: false }],
     };
   }
+
+  componentDidMount() {
+    this.setState({
+      todos: [{ id: 1, title: "test todo items", done: true }],
+    });
+  }
+
+  renderTodos() {
+    return this.state.todos.map((todo) => {
+      console.log(todo);
+      return <TodoItem key={todo.id} /*todo={todo}*/ {...todo} />;
+    });
+  }
+
   render() {
     return (
       <div className="app">
@@ -20,13 +35,7 @@ class App extends Component {
 
           <button>add</button>
         </form>
-
-        <div className="todo-item">
-          <input type="checkbox" />
-          <p>Todo item description</p>
-
-          <button>x</button>
-        </div>
+        {this.renderTodos()}
       </div>
     );
   }
