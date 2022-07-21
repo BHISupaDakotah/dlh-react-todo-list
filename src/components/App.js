@@ -5,13 +5,15 @@ TODO:
 -replace local data with api requests-
 get all todos [x]
 update todo (toggle done) [x]
-delete todo permanently []
+delete todo permanently [x]
 add todo [x]
 */
 
 // main controller
 import { Component } from "react";
+
 import TodoItem from "./TodoItem";
+import TodoForm from "./forms/TodoForm";
 
 let id = 0;
 class App extends Component {
@@ -65,14 +67,6 @@ class App extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.setState((prevState, prevProps) => ({
-      todos: [
-        { id: id, title: prevState.todo, done: false },
-        ...prevState.todos,
-      ],
-      todo: "",
-    }));
-
     fetch("https://rec-todo-api.herokuapp.com/todo", {
       method: "POST",
       body: JSON.stringify({
@@ -80,7 +74,7 @@ class App extends Component {
         done: false,
       }),
       headers: {
-        "content-type": "appication/json",
+        "content-type": "application/json",
       },
     })
       .then((res) => res.json())
@@ -89,7 +83,6 @@ class App extends Component {
           todos: [data, ...prevState.todos],
           todo: "",
         }));
-        debugger;
       })
       .catch((err) => console.error("handlesubmit error: ", err));
   }
@@ -130,18 +123,11 @@ class App extends Component {
     return (
       <div className="app">
         <h1>Todo List</h1>
-
-        <form className="add-todo" onSubmit={this.handleSubmit}>
-          <input
-            type="text"
-            name="todo"
-            placeholder="Add Todo"
-            onChange={this.handleChange}
-            value={this.state.todo}
-          />
-
-          <button>add</button>
-        </form>
+        <TodoForm
+          handleSubmit={this.handleSubmit}
+          handleChange={this.handleChange}
+          todo={this.state.todo}
+        />
         {this.renderTodos()}
       </div>
     );

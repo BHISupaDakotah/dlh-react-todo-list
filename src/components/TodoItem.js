@@ -20,7 +20,9 @@ export default class TodoItem extends Component {
       body: JSON.stringify({
         done: !this.state.done,
       }),
-      "content-type": "application/json",
+      headers: {
+        "content-type": "application/json",
+      },
     })
       .then((res) => res.json())
       .then((data) => {
