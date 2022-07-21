@@ -2,8 +2,9 @@
 TODO:
 -replace local data with api requests-
 get all todos [x]
-update todo (toggle done) []
+update todo (toggle done) [x]
 delete todo permanently []
+add todo []
 */
 
 // main controller
@@ -64,7 +65,6 @@ class App extends Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    id++;
     this.setState((prevState, prevProps) => ({
       todos: [
         { id: id, title: prevState.todo, done: false },
@@ -72,6 +72,26 @@ class App extends Component {
       ],
       todo: "",
     }));
+
+    fetch("https://rec-todo-api.herokuapp.com/todo", {
+      method: "POST",
+      body: JSON.stringify({
+        title: this.state.todo,
+        done: false,
+      }),
+      headers: {
+        "content-type": "appication/json",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState((prevState, props) => ({
+          todos: [data, ...prevState.todos],
+          todo: "",
+        }));
+        debugger;
+      })
+      .catch((err) => console.error("handlesubmit error: ", err));
   }
 
   // PLEASE ALWAYS USE SOMETHING GUARENTEED TO BE UNIQUE (email, id)
