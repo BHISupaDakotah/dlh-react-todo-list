@@ -14,12 +14,22 @@ export default class TodoItem extends Component {
     this.setState((prevState, prevProps) => ({
       done: !prevState.done,
     }));
+    // {this.props.todo.id (if used todo={todo})}
+    fetch(`https://rec-todo-api.herokuapp.com/todo/${this.props.id}`, {
+      method: "PATCH",
+      body: JSON.stringify({
+        done: !this.state.done,
+      }),
+      "content-type": "application/json",
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        this.setState({
+          done: data.done,
+        });
+      })
+      .catch((err) => console.error("handleclick error: ", err));
   }
-  // componentDidMount(){
-  //   this.setState({
-  //     done: this.props.done
-  //   })
-  // }
 
   render() {
     return (

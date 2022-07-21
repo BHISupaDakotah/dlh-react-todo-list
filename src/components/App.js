@@ -1,3 +1,11 @@
+/*
+TODO:
+-replace local data with api requests-
+get all todos [x]
+update todo (toggle done) []
+delete todo permanently []
+*/
+
 // main controller
 import { Component } from "react";
 import TodoItem from "./TodoItem";
@@ -23,6 +31,37 @@ class App extends Component {
   //   });
   // }
 
+  // feting main todos using api
+  componentDidMount() {
+    fetch("https://rec-todo-api.herokuapp.com/todos").then((res) =>
+      res
+        .json()
+        .then((data) => {
+          console.log(data);
+          // debugger;
+          this.setState({
+            todos: data,
+          });
+        })
+        .catch((err) => console.error("get todos error:", err))
+    );
+  }
+  // ****** USING MOCK DATA ******
+  // handleSubmit(e) {
+  //   e.preventDefault();
+  //   id++;
+  //   this.setState((prevState, prevProps) => ({
+  //     todos: [
+  //       { id: id, title: prevState.todo, done: false },
+  //       ...prevState.todos,
+  //     ],
+  //     todo: "",
+  //   }));
+  // }
+
+  // ****** USING API DATA *****
+  // https://rec-todo-api.herokuapp.com/todos
+
   handleSubmit(e) {
     e.preventDefault();
     id++;
@@ -34,6 +73,7 @@ class App extends Component {
       todo: "",
     }));
   }
+
   // PLEASE ALWAYS USE SOMETHING GUARENTEED TO BE UNIQUE (email, id)
   handleDelete(id) {
     this.setState((prevState, prevProps) => ({
