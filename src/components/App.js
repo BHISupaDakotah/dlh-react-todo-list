@@ -1,10 +1,12 @@
+// videos of 7/20 -7/21
+
 /*
 TODO:
 -replace local data with api requests-
 get all todos [x]
 update todo (toggle done) [x]
 delete todo permanently []
-add todo []
+add todo [x]
 */
 
 // main controller
@@ -38,8 +40,6 @@ class App extends Component {
       res
         .json()
         .then((data) => {
-          console.log(data);
-          // debugger;
           this.setState({
             todos: data,
           });
@@ -96,9 +96,16 @@ class App extends Component {
 
   // PLEASE ALWAYS USE SOMETHING GUARENTEED TO BE UNIQUE (email, id)
   handleDelete(id) {
-    this.setState((prevState, prevProps) => ({
-      todos: prevState.todos.filter((todo) => todo.id !== id),
-    }));
+    fetch(`https://rec-todo-api.herokuapp.com/todo/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then(() => {
+        this.setState((prevState, prevProps) => ({
+          todos: this.state.todos.filter((todo) => todo.id !== id),
+        }));
+      })
+      .catch((err) => console.error("delete error: ", err));
   }
 
   handleChange(e) {
@@ -109,7 +116,6 @@ class App extends Component {
 
   renderTodos() {
     return this.state.todos.map((todo) => {
-      console.log(todo);
       return (
         <TodoItem
           key={todo.id}
